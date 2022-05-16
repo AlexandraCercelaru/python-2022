@@ -1,0 +1,98 @@
+<html>
+<head>
+    <title>Python Project-2022</title>
+</head>
+
+<body bgcolor="lightblue">
+<font size="5" face="times new roman">
+    <h1 align="center">Calorie Tracker</h1>
+    <h2>Live a health life</h2>
+        <br>
+
+        <div style="text-align:center" class="row">
+            <div class="col-md-12">
+                <form method="POST">
+                    <div class="form-group row">
+                        {% csrf_token %}
+                        <label class="col-md-2">
+                            <b>Select Food To Add </b>
+                        </label>
+                        <select class="col-md-6 form-control" name="food_consumed" id="food_consumed">
+                            {% for food in foods %}
+                            <option value="{{food.name}}">{{food.name}}</option>
+                            {% endfor %}
+                        </select>
+                        <button class="btn btn-success" type="submit">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-7">
+                <div>
+                    <h4 style="text-align:center"> Today's Consumption</h4>
+                </div>
+
+                <table id="table" class="table table-striped table-primary">
+                        <th style="text-align:center"><br>Food item</br></th>
+                        <th style="text-align:center">Carbs(gm)</th>
+                        <th style="text-align:center">Protein(gm)</th>
+                        <th style="text-align:center">Fats(gm)</th>
+                        <th style="text-align:center">Calories(Kcal)</th>
+                        <th style="text-align:center"><br>Remove</br></th>
+                    {% for c in consumed_food %}
+                    <tr>
+                        <td style="text-align:center">{{c.food_consumed.name}}</td>
+                        <td style="text-align:center">{{c.food_consumed.carbs}}</td>
+                        <td style="text-align:center">{{c.food_consumed.protein}}</td>
+                        <td style="text-align:center">{{c.food_consumed.fats}}</td>
+                        <td style="text-align:center">{{c.food_consumed.calories}}</td>
+                        <td style="text-align:center"><a class="btn btn-danger" href="{% url 'delete' c.pk %}">X</a>
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                        <td style="text-align:center" id="name"><b>Total</b></td>
+                        <td style="text-align:center" id="totalCarbs"><b></b></td>
+                        <td style="text-align:center" id="totalProtien"><b></b></td>
+                        <td style="text-align:center" id="totalFats"><b></b></td>
+                        <td style="text-align:center" id="totalCalories"><b></b></td>
+
+
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+</font>
+</body>
+<script>
+    var table = document.getElementById("table");
+    var carbs = 0, protein = 0, fats = 0, calories = 0;
+
+    for (var i = 1; i < table.rows.length - 1; i++) {
+        console.log(table.rows[i].cells[1].innerHTML);
+        carbs += parseFloat(table.rows[i].cells[1].innerHTML);
+        carbs = Math.round(carbs);
+        protein += parseFloat(table.rows[i].cells[2].innerHTML);
+        protein = Math.round(protein)
+        fats += parseFloat(table.rows[i].cells[3].innerHTML);
+        fats = Math.round(fats);
+        calories += parseFloat(table.rows[i].cells[4].innerHTML);
+        calories = Math.round(calories);
+    }
+
+    document.getElementById("totalCarbs").innerHTML = '<b>' + carbs + '(gm)</b>';
+    document.getElementById("totalProtien").innerHTML = '<b>' + protein + '(gm)</b>';
+    document.getElementById("totalFats").innerHTML = '<b>' + fats + '(gm)</b>';
+    document.getElementById("totalCalories").innerHTML = '<b>' + calories + '(Kcal)</b>';
+
+
+
+</script>
+
+</html>
